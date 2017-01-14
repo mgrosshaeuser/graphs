@@ -69,7 +69,7 @@ public class PrimAlgorithm extends JPanel{
 					primEdges.add(temp);
 										
 					fib.decreaseKey(v, graph.getEdgeLength(u, v));
-					v.setKey(u.getKey() + graph.getEdgeLength(u, v));
+					v.setKey(graph.getEdgeLength(u, v));
 					v.setParent(u);
 				}
 			}
