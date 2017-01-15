@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -17,6 +18,8 @@ public class BellmanFord extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	private static final double SCALE = VisualGraph.SUBWINDOW_SCALE;
+	
+	private ArrayList<Edge> finalEdges;
 
 	private Graph graph;
 
@@ -24,7 +27,13 @@ public class BellmanFord extends JPanel{
 	
 	public  BellmanFord(Graph graph, Node startNode){
 		this.graph = graph;
+		finalEdges  = new ArrayList<>();
 		bellmanFord(graph, startNode);
+		for (Node n : graph.getNodes()){
+			if (n.getParent() != null){
+				finalEdges.add(new Edge(n, n.getParent(), graph.getEdgeLength(n, n.getParent())));
+			}
+		}
 	}	
 
 	
@@ -61,7 +70,7 @@ public class BellmanFord extends JPanel{
 	private void relax(Node u, Node v){
 		if (v.getKey() > (u.getKey() + graph.getEdgeLength(u, v))){
 			v.setKey(u.getKey() + graph.getEdgeLength(u, v));
-			v.setParent(null);
+			v.setParent(u);
 		}
 	}
 	
@@ -103,7 +112,14 @@ public class BellmanFord extends JPanel{
 
 	
 	private void drawElements(Graphics2D g2d){
-		for (Edge e : graph.getEdges()){
+		for (Edge e :graph.getEdges()){
+			e.drawEdge(g2d, SCALE, " ");
+		}
+		
+		g2d.setColor(new Color(255,255,255,160));
+		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+		
+		for (Edge e : finalEdges){
 			e.drawEdge(g2d, SCALE, " ");
 		}
 	
@@ -114,7 +130,4 @@ public class BellmanFord extends JPanel{
 	}		
 	
 	
-	
-	
-
 }

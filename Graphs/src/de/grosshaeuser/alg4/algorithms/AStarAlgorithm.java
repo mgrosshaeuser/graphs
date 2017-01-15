@@ -61,24 +61,30 @@ public class AStarAlgorithm extends JPanel{
 				return true;
 			}
 			closedList.add(u);
-			expandNode (graph, closedList, openList, u, startNode);
+			expandNode (graph, closedList, openList, u, endNode);
 		}
 		return false;
 	}
 	
-	private void expandNode(Graph graph, ArrayList<Node> closedList, FibonacciHeap openList, Node u, Node startNode){
+	private void expandNode(Graph graph, ArrayList<Node> closedList, FibonacciHeap openList, Node u, Node endNode){
 		for (Node v : u.getNeighbors()){
 			if (closedList.contains(v) ){
 				continue;
 			}
+			
 			double g = u.getKey() + graph.getEdgeLength(u, v);
+			
 			if (log.contains(v)   &&   g >= v.getKey()){
 				continue;
 			}
-			v.setParent(null);
-			double f = g + graph.getNodeDistance(startNode, u);
-			v.setKey(f);
-			if ( ! log.contains(v) ){
+
+			double f = g + graph.getNodeDistance(u, endNode);
+			
+			if (log.contains(v) ){
+				v.setKey(f);
+				openList.decreaseKey(v, f);
+			}else {
+				v.setKey(f);
 				openList.insert(v);
 				log.add(v);
 			}
@@ -155,7 +161,7 @@ public class AStarAlgorithm extends JPanel{
 		
 		for (Node n : graph.getNodes()){
 			String key = String.format("%4.0f", n.getKey());
-			n.drawCustomNode(g2d, SCALE, key);;
+			n.drawCustomNode(g2d, SCALE, key);
 		}
 	}
 	
