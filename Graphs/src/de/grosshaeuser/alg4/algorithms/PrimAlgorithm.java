@@ -61,16 +61,17 @@ public class PrimAlgorithm extends JPanel{
 		while (! fib.isEmpty()){
 			Node u = fib.extractMin();
 			for (Node v : u.getNeighbors()){
-				if (!primNodes.contains(v)   &&   (u.getKey() + graph.getEdgeLength(u, v)) < v.getKey()){
+				double edgeLength = graph.getEdgeLength(u, v);
+				if (!primNodes.contains(v)   &&   (edgeLength) < v.getKey()){
 					Edge temp = graph.getDirectedEdge(u, v);
 					for (Edge e : graph.getDirectedEdgesTo(v)){
 						primEdges.remove(e);
 					}
 					primEdges.add(temp);
-										
-					fib.decreaseKey(v, graph.getEdgeLength(u, v));
-					v.setKey(graph.getEdgeLength(u, v));
-					v.setParent(u);
+					
+					
+					fib.decreaseKey(v, edgeLength);
+					v.setKey(edgeLength);
 				}
 			}
 			primNodes.add(u);

@@ -57,16 +57,17 @@ public class DijkstraAlgorithm  extends JPanel{
 		while (! fib.isEmpty()){
 			Node u = fib.extractMin();
 			for (Node v : u.getNeighbors()){
-				if (v.getKey() > (u.getKey() + graph.getEdgeLength(u, v))){
+				Double distanceFromStart = u.getKey() + graph.getEdgeLength(u, v);
+				if (v.getKey() > (distanceFromStart)){
 					Edge temp = graph.getDirectedEdge(u, v);
 					for (Edge e : graph.getDirectedEdgesTo(v)){
 						dijkstraEdges.remove(e);
 					}
 					dijkstraEdges.add(temp);
 					
-					fib.decreaseKey(v, u.getKey() + graph.getEdgeLength(u, v));
-					v.setKey(u.getKey() + graph.getEdgeLength(u, v));
-					v.setParent(u);
+					fib.decreaseKey(v, distanceFromStart);
+					v.setKey(distanceFromStart);
+					
 				}
 			}
 		}
